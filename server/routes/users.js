@@ -7,9 +7,7 @@ const { Payment } = require('../models/Payment');
 
 const async = require('async');
 
-//=================================
-//             User
-//=================================
+// USER ====================================
 
 router.get("/auth", auth, (req, res) => {
     res.status(200).json({
@@ -177,7 +175,7 @@ router.post('/successBuy', auth, (req, res) => {
     let history = [];
     let transactionData = {};
 
-    //1.Put brief Payment Information inside User Collection 
+    // Payment Information inside User Collection 
     req.body.cartDetail.forEach((item) => {
         history.push({
             dateOfPurchase: Date.now(),
@@ -213,18 +211,10 @@ router.post('/successBuy', auth, (req, res) => {
             payment.save((err, doc) => {
                 if (err) return res.json({ success: false, err });
 
-                //3. Increase the amount of number for the sold information 
-
-                //first We need to know how many product were sold in this transaction for 
-                // each of products
-
                 let products = [];
                 doc.product.forEach(item => {
                     products.push({ id: item.id, quantity: item.quantity })
                 })
-
-                // first Item    quantity 2
-                // second Item  quantity 3
 
                 async.eachSeries(products, (item, callback) => {
                     Product.update(
