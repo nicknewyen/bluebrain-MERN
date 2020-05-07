@@ -1,3 +1,3 @@
-// module.exports = {
-//     mongoURI:process.env.MONGO_URI
-// }
+module.exports = {
+    mongoURI:'//<username>:<password>@cluster0-baafu.mongodb.net/test?retryWrites=true&w=majority'
+}
