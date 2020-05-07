@@ -6,7 +6,7 @@ const cors = require('cors')
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-const config = require("./config/key");
+// const config = require("./config/key");
 
 // const mongoose = require("mongoose");
 // mongoose
@@ -15,9 +15,12 @@ const config = require("./config/key");
 //   .catch(err => console.error(err));
 
 const mongoose = require("mongoose");
-mongoose.connect('mongodb+srv://bluebrain:newyen12@cluster0-baafu.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
-  .then(() => console.log('MongoDB Connected...'))
-  .catch(err => console.log(err));
+ mongoose.connect('mongodb+srv://bluebrain:newyen12@cluster0-baafu.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
+ mongoose.connection.once('open', function(){
+  console.log('Conection has been made!');
+}).on('error', function(error){
+    console.log('Error is: ', error);
+});
 
 app.use(cors())
 
