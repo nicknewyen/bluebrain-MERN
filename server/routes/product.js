@@ -24,7 +24,9 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single("file")
 
 
-// PRODUCT ===========================
+//=================================
+//             Product
+//=================================
 
 router.post("/uploadImage", auth, (req, res) => {
 
@@ -40,6 +42,7 @@ router.post("/uploadImage", auth, (req, res) => {
 
 router.post("/uploadProduct", auth, (req, res) => {
 
+    //save all the data we got from the client into the DB 
     const product = new Product(req.body)
 
     product.save((err) => {
@@ -49,7 +52,7 @@ router.post("/uploadProduct", auth, (req, res) => {
 
 });
 
-
+// GET PRODUCTS FOR FILTER MAKES COMPARISON
 router.post("/getProducts", (req, res) => {
 
     let order = req.body.order ? req.body.order : "desc";
@@ -63,7 +66,7 @@ router.post("/getProducts", (req, res) => {
     for (let key in req.body.filters) {
 
         if (req.body.filters[key].length > 0) {
-            if (key === "price") {
+            if (key === "Filter Price") {
                 findArgs[key] = {
                     $gte: req.body.filters[key][0],
                     $lte: req.body.filters[key][1]
@@ -101,6 +104,9 @@ router.post("/getProducts", (req, res) => {
 
 });
 
+
+//?id=${productId}&type=single
+//id=12121212,121212,1212121   type=array 
 router.get("/products_by_id", (req, res) => {
     let type = req.query.type
     let productIds = req.query.id
@@ -118,7 +124,7 @@ router.get("/products_by_id", (req, res) => {
     console.log("productIds", productIds)
 
 
-    // find product information by using product id
+    //we need to find the product information that belong to product Id 
     Product.find({ '_id': { $in: productIds } })
         .populate('writer')
         .exec((err, product) => {
